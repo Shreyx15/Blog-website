@@ -1,0 +1,177 @@
+<%- include("partials/header"); %>
+
+
+    <div class="header">
+        <nav class="navbar navbar-light bg-light left" style="padding: 0%;">
+            <div class="menu-item active" onclick="toggleActive(this)">My Blogs</div>
+            <div class="menu-item" onclick="toggleActive(this)">Following</div>
+        </nav>
+        <div class="input-group ps-5 right search">
+            <div id="navbar-search-autocomplete" class="form-outline" style="margin-right: 10px;">
+                <input type="search" id="form1" class="form-control" style="width: 300px;" />
+                <button type="button" class="btn btn-primary" style="" onclick="submitSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <div id="matchedUsernames"></div>
+
+        </div>
+
+    </div>
+
+
+    <div id="my-blogs-container" class="my-blogs">
+        <p>
+            <% dataFromBody.forEach(function(data) { %>
+                <h1>
+                    <%= data.title %>
+                </h1>
+        </p>
+        <p>
+            <%= data.content.substring(0, 100) + " ..." %>
+
+                <a href="/posts/<%= data.title %>">Read more</a>
+        </p>
+        <hr>
+        <% }); %>
+    </div>
+    <a href="/add-people" class="add-people-button">
+        <i class="fas fa-users"></i> Add People
+    </a>
+
+    <!-- Compose button with pencil icon -->
+    <a href="/compose" class="compose-button">
+        <i class="fas fa-pencil-alt"></i> Compose
+    </a>
+    <div id="following-blogs-container" class="following-blogs" style="display: none;">
+        <p>
+            <% dataFromBody.forEach(function(data) { %>
+                <h1>
+                    <%= data.title %>
+                </h1>
+        </p>
+        <p>
+            <%= data.content.substring(0, 100) + " ..." %>
+
+                <a href="/posts/<%= data.title %>">Read more</a>
+        </p>
+        <hr>
+        <% }); %>
+    </div>
+
+    <script>
+        function submitSearch() {
+            const searchInput = document.getElementById("form1");
+            const matchedUsernamesDiv = document.getElementById("matchedUsernames");
+            const searchQuery = searchInput.value.toLowerCase().trim();
+            console.log(searchInput.value);
+            // Clear the matched usernames div
+            matchedUsernamesDiv.innerHTML = "";
+
+            if (searchQuery.length === 0) {
+                return;
+            }
+            $.ajax({
+                url: `/search-users?query=${searchQuery}`,
+                method: "GET",
+                dataType: "json",
+                success: function (matchedUsers) {
+
+                    matchedUsers.forEach((user) => {
+                        const form = document.createElement("form");
+                        form.method = "POST";
+                        form.action = "/add-following";
+
+                        const userIdInput = document.createElement("input");
+                        userIdInput.type = "hidden";
+                        userIdInput.name = "userToFollowID";
+                        userIdInput.value = user._id;
+
+                        const label = document.createElement("label");
+                        label.innerHTML = user.username;
+
+                        const addButton = document.createElement("button");
+                        addButton.type = "submit";
+                        addButton.innerHTML = '<i class="fas fa-user-plus"></i> Add';
+
+                        const hr = document.createElement("hr");
+
+                        form.appendChild(userIdInput);
+                        form.appendChild(label);
+                        form.appendChild(addButton);
+                        form.appendChild(hr);
+                        matchedUsernamesDiv.appendChild(form);
+                    });
+
+                    // Show the matched usernames div
+                    matchedUsernamesDiv.style.display = "block";
+
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                },
+            });
+            function addFollowingFormSubmit(form) {
+                // Submit the form using AJAX
+                $.ajax({
+                    url: form.action,
+                    method: "POST",
+                    data: $(form).serialize(),
+                    success: function (response) {
+                        // Show a success pop-up notification
+                        Swal.fire({
+                            icon: "success",
+                            title: "User added to your following",
+                            text: "The request to follow this user has been sent.",
+                        });
+                    },
+                    error: function (error) {
+                        console.error("Error adding user to following list:", error);
+                    },
+                });
+            }
+            $(document).on("submit", "form", function (event) {
+                event.preventDefault();
+                addFollowingFormSubmit(this);
+            });
+            function hideMatchedUsernames() {
+                const matchedUsernamesDiv = document.getElementById("matchedUsernames");
+                matchedUsernamesDiv.style.display = "none";
+            }
+
+            // Listen for click events on the document
+            document.addEventListener("click", function (event) {
+                const matchedUsernamesDiv = document.getElementById("matchedUsernames");
+
+                // Check if the clicked element is outside the matchedUsernamesDiv
+                if (!matchedUsernamesDiv.contains(event.target)) {
+                    hideMatchedUsernames();
+                }
+            });
+
+
+
+        }
+
+        function toggleActive(element) {
+            const menuItems = document.getElementsByClassName("menu-item");
+            for (const item of menuItems) {
+                item.classList.remove("active");
+            }
+            element.classList.add("active");
+
+            const myBlogsContainer = document.getElementById("my-blogs-container");
+            const followingBlogsContainer = document.getElementById("following-blogs-container");
+
+            if (element.innerText === "My Blogs") {
+                myBlogsContainer.style.display = "block";
+                followingBlogsContainer.style.display = "none";
+            } else if (element.innerText === "Following") {
+                myBlogsContainer.style.display = "none";
+                followingBlogsContainer.style.display = "block";
+            }
+        }
+
+
+    </script>

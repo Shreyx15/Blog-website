@@ -1,0 +1,16 @@
+<%- include("partials/header"); %>
+
+    <div class="search-container">
+        <form action="/search" method="GET">
+            <input type="text" name="query" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div id="my-blogs-container" class="my-blogs">
+        <!-- Your blog posts content for "My Blogs" here -->
+    </div>
+
+    <div id="following-blogs-container" class="following-blogs" style="display: none;">
+        <!-- Your blog posts content for "Following Blogs" here -->
+    </div>
