@@ -22,7 +22,7 @@ const contactContent = "Scelerisque eleifend donec pretium vulputate sapien. Rho
 
 
 // This section is for mongoDB database
-mongoose.connect('mongodb://127.0.0.1:27017/BLOG'); // connect to mongoDB localhost
+mongoose.connect('mongodb+srv://Shreyx15:shrey2002@cluster0.8cux0ks.mongodb.net/BLOG?retryWrites=true&w=majority'); // connect to mongoDB localhost
 app.use(express.json());
 app.use(cookieParser());
 app.use(session({

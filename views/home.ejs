@@ -143,6 +143,10 @@
                             icon: "success",
                             title: "User added to your following",
                             text: "The request to follow this user has been sent.",
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                location.reload();
+                            }
                         });
                     },
                     error: function (error) {
