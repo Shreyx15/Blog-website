@@ -94,15 +94,14 @@ home page */
   right: 0;
   bottom: 0;
   border-radius: inherit;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0);
-  transition: box-shadow 0.3s ease;
 }
 
 .menu-item.active::after {
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.5);
 }
 
-/* Add this CSS to your existing stylesheet or create a new CSS file and include it in your HTML */
+
+
 
 /* Style for the "Add People" button */
 .add-people-button {
@@ -135,6 +134,20 @@ home page */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.logout-button {
+  position: fixed;
+  bottom: 60px;
+  padding: 12px 17px;
+  background-color: rgb(255, 46, 46);
+  /* Blue background color */
+  color: #fff;
+  /* White text color */
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+}
+
 /* Style for the Font Awesome icons */
 .add-people-button i,
 .compose-button i {
@@ -165,4 +178,135 @@ home page */
 
 hr {
   border-color: black;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 
+this is for the chatting like look  */
+.following-blogs {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the username */
+.following-blogs .username {
+  font-weight: bold;
+  color: #07c;
+}
+
+/* Style for the title */
+.following-blogs .title {
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
+/* Style for the content */
+.following-blogs .content {
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Style for the clock icon */
+.following-blogs .clock-icon {
+  float: right;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Clear float for clock icon */
+.following-blogs::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.my-blogs {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the title */
+.my-blogs .title {
+  font-weight: bold;
+  color: #07c;
+}
+
+/* Style for the content */
+.my-blogs .content {
+  color: #666;
+  margin-top: 5px;
+}
+
+/* Style for the clock icon */
+.my-blogs .clock-icon {
+  float: right;
+  font-size: 12px;
+  color: #888;
+}
+
+/* Clear float for clock icon */
+.my-blogs::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Custom style for the delete button */
+.delete-button {
+  margin-left: 10px;
+  /* Adjust the distance between the title and the button */
+  color: white;
+  background-color: red;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Align the title and button on the same line */
+.title-with-button {
+  display: flex;
+  align-items: center;
+}
+
+.unfollow-button {
+  margin-left: 10px;
+  /* Adjust the distance between the username and the button */
+  color: white;
+  background-color: #dc3545;
+  /* Use Bootstrap's danger color (red) */
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Align the username and Unfollow button on the same line */
+.following {
+  display: flex;
+  align-items: center;
+}
+
+.username-with-button {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
 }

@@ -3,6 +3,10 @@ const { default: mongoose } = require('mongoose');
 const { verify } = require('./auth');
 const { User, Blog } = require('./db');
 
+router.get("/compose", function (req, res) {
+    res.render("compose");
+});
+
 
 router.post("/compose", verify, function (req, res) {
     const composeTitle = req.body.Title;

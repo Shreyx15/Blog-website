@@ -8,7 +8,8 @@
         </nav>
         <div class="input-group ps-5 right search">
             <div id="navbar-search-autocomplete" class="form-outline" style="margin-right: 10px;">
-                <input type="search" id="form1" class="form-control" style="width: 300px;" />
+                <input type="search" id="form1" class="form-control" style="width: 300px;"
+                    placeholder="Search for People" />
                 <button type="button" class="btn btn-primary" style="" onclick="submitSearch()">
                     <i class="fas fa-search"></i>
                 </button>
@@ -22,42 +23,60 @@
 
 
     <div id="my-blogs-container" class="my-blogs">
-        <p>
-            <% dataFromBody.forEach(function(data) { %>
-                <h1>
-                    <%= data.title %>
-                </h1>
-        </p>
-        <p>
-            <%= data.content.substring(0, 100) + " ..." %>
-
-                <a href="/posts/<%= data.title %>">Read more</a>
-        </p>
-        <hr>
-        <% }); %>
+        <% myBlogs.forEach(function(data) { %>
+            <div class="chat-message">
+                <div class="title-with-button">
+                    <div class="title">
+                        <%= data.title %>
+                    </div>
+                    <button class="delete-button" value="<%= data._id %>">
+                        <i class=" fas fa-trash-alt"></i>
+                    </button>
+                </div>
+                <div class="content">
+                    <%= data.content %>
+                </div>
+                <div class="clock-icon">
+                    <i class="far fa-clock"></i>
+                    <%= new Date(data.timestamp).toLocaleString() %>
+                </div>
+            </div>
+            <hr>
+            <% }); %>
     </div>
-    <a href="/add-people" class="add-people-button">
-        <i class="fas fa-users"></i> Add People
-    </a>
+
 
     <!-- Compose button with pencil icon -->
     <a href="/compose" class="compose-button">
         <i class="fas fa-pencil-alt"></i> Compose
     </a>
+    <a href="#" class="logout-button" onclick="confirmLogout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
     <div id="following-blogs-container" class="following-blogs" style="display: none;">
-        <p>
-            <% dataFromBody.forEach(function(data) { %>
-                <h1>
+        <% followingBlogs.forEach(function(data) { %>
+            <div class="chat-message">
+                <div class="username-with-button">
+                    <div class="username">
+                        <%= data.author %>
+                    </div>
+                    <button class="unfollow-button" value="<%= data._id %>">
+                        <i class="fas fa-user-times"></i>
+                    </button>
+                </div>
+                <div class="title">
                     <%= data.title %>
-                </h1>
-        </p>
-        <p>
-            <%= data.content.substring(0, 100) + " ..." %>
-
-                <a href="/posts/<%= data.title %>">Read more</a>
-        </p>
-        <hr>
-        <% }); %>
+                </div>
+                <div class="content">
+                    <%= data.content %>
+                </div>
+                <div class="clock-icon">
+                    <i class="far fa-clock"></i>
+                    <%= new Date(data.timestamp).toLocaleString() %>
+                </div>
+            </div>
+            <hr>
+            <% }); %>
     </div>
 
     <script>
@@ -172,6 +191,107 @@
                 followingBlogsContainer.style.display = "block";
             }
         }
+        function confirmLogout() {
 
+            // Show a confirmation dialog
+            const confirmLogout = confirm("Are you sure you want to log out?");
+
+            // If user confirms, redirect to the logout URL
+            if (confirmLogout) {
+                window.location.href = "/logout";
+            } else {
+                console.log("noo logout lol");
+            }
+        }
+
+
+        $(".delete-button").on("click", function () {
+            // Get the blog ID from the data attribute
+            const blogId = $(this).val();
+
+            // Show a confirm dialog using Swal
+            Swal.fire({
+                icon: "warning",
+                title: "Are you sure?",
+                text: "You are about to delete the selected blog. This action cannot be undone.",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Delete",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                // If the user confirms the deletion (clicks "Delete" button), proceed with the delete request
+                if (result.isConfirmed) {
+                    // Make an AJAX request to the backend to delete the blog
+                    $.ajax({
+                        url: `/delete-blog/${blogId}`, // Replace this with your backend route to delete a blog
+                        method: "GET",
+                        success: function (response) {
+
+                            // Handle the success response if needed
+                            Swal.fire({
+                                icon: "success",
+                                title: "Deleted!",
+                                text: "The selected Blog is deleted!",
+                            }).then(() => {
+                                // After the user clicks "OK" on the success Swal popup, refresh the page
+                                location.reload();
+                            });
+
+                            // If the blog was successfully deleted, remove the chat message from the DOM
+                            $(this).closest(".chat-message").remove();
+                        },
+                        error: function (error) {
+                            // Handle the error response if needed
+                            console.error("Error deleting blog:", error);
+                        },
+                    });
+                }
+            });
+        });
+
+
+        $(".unfollow-button").on("click", function () {
+
+            const personId = $(this).val();
+            Swal.fire({
+                icon: "warning",
+                title: "Are you sure?",
+                text: "You are about to unfollow the selected person",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Unfollow",
+                cancelButtonText: "Cancel",
+            }).then((result) => {
+                // If the user confirms the deletion (clicks "Delete" button), proceed with the delete request
+                if (result.isConfirmed) {
+                    // Make an AJAX request to the backend to delete the blog
+                    $.ajax({
+                        url: `/unfollow/${personId}`, // Replace this with your backend route to delete a blog
+                        method: "GET",
+                        success: function (response) {
+
+                            // Handle the success response if needed
+                            Swal.fire({
+                                icon: "success",
+                                title: "Unfollowed!",
+                                text: "You unfollowed the user!",
+                            }).then(() => {
+                                // After the user clicks "OK" on the success Swal popup, refresh the page
+                                location.reload();
+                            });
+
+                            // If the blog was successfully deleted, remove the chat message from the DOM
+                            $(this).closest(".chat-message").remove();
+                        },
+                        error: function (error) {
+                            // Handle the error response if needed
+                            console.error("Error unfollowing person:", error);
+                        },
+                    });
+                }
+            });
+        });
 
     </script>

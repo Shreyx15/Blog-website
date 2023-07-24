@@ -39,58 +39,6 @@ const postspage = require("./routes/posts");
 app.use("/", router);
 app.use("/", compose);
 app.use("/", postspage);
-const posts = [];
-
-
-// pages and their methods
-
-// app.get("/", function (req, res) {
-//     Blog.find()
-//         .then(foundItems => {
-//             res.render("home",
-//                 {
-//                     homestart: homeStartingContent,
-//                     dataFromBody: foundItems
-//                 });
-//         })
-//         .catch(err => {
-//             console.error(err);
-//         });
-
-// });
-app.get("/contact", function (req, res) {
-    res.render("Contact",
-        { contact: contactContent });
-
-});
-app.get("/about", function (req, res) {
-    res.render("about",
-        { about: aboutContent })
-});
-
-app.get("/compose", function (req, res) {
-    res.render("compose");
-});
-
-
-// app.get("/posts/:post", function (req, res) {
-
-
-//     Blog.findOne({ title: req.params.post })
-//         .then((foundItems) => {
-//             res.render("post", {
-
-//                 singlePost: foundItems
-//             });
-//         }).
-//         catch(err => {
-//             res.send("data not found!!! ");
-//         });
-// });
-
-
-
-// port
 
 app.listen(3000, function () {
     console.log("port is active now!");
