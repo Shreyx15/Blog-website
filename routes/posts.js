@@ -2,12 +2,12 @@ const router = require('express').Router();
 const { verify } = require('./auth');
 const { Blog, User } = require('./db');
 const { default: mongoose, mongo } = require('mongoose');
+const passport = require('passport');
 
 router.get("/home", verify, async function (req, res) {
     let author = req.session.userId;
-    author = mongoose.Types.ObjectId(author);
+    author = typeof author === 'object' ? author : mongoose.Types.ObjectId(author);
     let username = req.session.username;
-    console.log(author, username);
 
     const followingUserIDs = await User.findById(author);
     const followingList = followingUserIDs.following;
@@ -134,5 +134,6 @@ router.get("/unfollow/:personId", verify, async function (req, res) {
         res.status(500).json({ error: "An error occurred while unfollowing user" });
     }
 });
+
 
 module.exports = router;
