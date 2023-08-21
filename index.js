@@ -25,7 +25,7 @@ app.use(session({
     cookie: { maxAge: 3600000 } // set cookie expiration time (1 hour)
 }));
 app.use(passport.authenticate('session'));
-
+app.use(express.json());
 
 const { router, verify } = require('./routes/auth');
 const compose = require("./routes/compose");
