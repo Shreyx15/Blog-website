@@ -60,6 +60,7 @@ router.get('/oauth2/redirect/google', passport.authenticate('google', {
 router.get("/register", function (req, res) {
     res.render("register");
 });
+
 router.post("/login", function (req, res) {
     let email = req.body.email;
     let password = req.body.password;
@@ -131,6 +132,7 @@ router.get("/logout", verify, function (req, res) {
 
 function verify(req, res, next) {
     if (req.isAuthenticated()) {
+        console.log(req.isAuthenticated());
         req.session.userId = req.user._id;
         req.session.username = req.user.username;
         req.session.isGoogleLogin = true;

@@ -26,7 +26,7 @@ const userSchema = new Schema({
     googleID: {
         type: String,
         required: function () {
-            return !this.isGoogleLogin;
+            return this.isGoogleLogin;
         }
     }
 });
