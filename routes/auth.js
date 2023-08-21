@@ -3,6 +3,9 @@ const { User } = require('./db');
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 let GoogleStrategy = require('passport-google-oidc').Strategy;
+var jwt = require('jsonwebtoken');
+var token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
